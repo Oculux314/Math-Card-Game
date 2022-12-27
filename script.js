@@ -2,6 +2,7 @@
 
 // For miscellaneous functions that are literally just there to help make another function easier to write
 
+
 /* Card Manipulator Functions ----------------------------------------------------------------------------------------------*/
 
 function addCardToDeck(card) {
@@ -28,6 +29,7 @@ function swapPlayerCards(player1, position1, player2, position2) {
     // Return: none
 }
 
+
 /* Logic Functions ---------------------------------------------------------------------------------------------------------*/
 
 function evaluateHand(hand) {
@@ -35,6 +37,7 @@ function evaluateHand(hand) {
     // Actions: calculate the value of the hand
     // Return: the hand value
 }
+
 
 /* Setup Functions ---------------------------------------------------------------------------------------------------------*/
 
@@ -56,6 +59,7 @@ function chooseGoalNumber() {
     // Return: the 'score' number
 }
 
+
 /* Runtime Functions -------------------------------------------------------------------------------------------------------*/
 
 function takeTurn() {
@@ -63,6 +67,7 @@ function takeTurn() {
     // Actions:
     // Return:
 }
+
 
 /* Render Functions --------------------------------------------------------------------------------------------------------*/
 
@@ -89,6 +94,7 @@ function renderGoalScore(score) {
     // Actions: update the goal score html element
     // Return: none
 }
+
 
 /* UI Functions ------------------------------------------------------------------------------------------------------------*/
 
