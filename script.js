@@ -63,9 +63,9 @@ function chooseGoalNumber() {
 /* Runtime Functions -------------------------------------------------------------------------------------------------------*/
 
 function takeTurn() {
-    // Parameters:
-    // Actions:
-    // Return:
+    // Parameters: none
+    // Actions: idk lol
+    // Return: none
 }
 
 
@@ -95,6 +95,18 @@ function renderGoalScore(score) {
     // Return: none
 }
 
+function highlightElement(id) {
+    // Parameters: (id) id of element to highlight
+    // Actions: 'highlight' (enlarge slightly) the specified element
+    // Return: none
+}
+
+function unhighlightElement(id) {
+    // Parameters: (id) id of element to stop highlighting
+    // Actions: 'dehighlight' (return to original size) the specified element
+    // Return: none
+}
 
 /* UI Functions ------------------------------------------------------------------------------------------------------------*/
 
+// How do click event handlers work in JS??
