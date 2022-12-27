@@ -107,6 +107,24 @@ function unhighlightElement(id) {
     // Return: none
 }
 
+function changeDeck(card) {
+    // Parameters: (card) card value to reveal from deck [0 - 51, or -1 for deck]
+    // Actions: switch deck card graphic to specified value
+    // Return: none
+}
+
 /* UI Functions ------------------------------------------------------------------------------------------------------------*/
 
 // How do click event handlers work in JS??
+
+function onDeckClick() {
+    // Parameters: none
+    // Actions: handler for when deck clicked
+    // Return: none
+}
+
+function onCardClick() {
+    // Parameters: none
+    // Actions: handler for when card clicked
+    // Return: id of card clicked
+}
