@@ -1,6 +1,7 @@
 const deck = [];
 const p1Hand = [];
 const p2Hand = [];
+
 const setUpDeck = function () {
   for (let i = 0; i <= 52; i++) {
     deck.push(i);
