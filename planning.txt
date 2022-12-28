@@ -7,22 +7,20 @@ Fun rating: infinity
 
 /*------------------- HTML ------------------*/
 
-# means we don't have it yet
-
-Left div                    #
+Left div                    class="layout--div" id="left"
     2x player divs          class="player--div" id="player--X"
         Header div          class="header--div"
             Header          class="header"
         Card rack div       class="card--rack"
             5x card divs    class="card--div" id="pX--cY"
-                Card        #  <-- text for now but probably card images later
-        Score div           #
-            Score           #
-Right div                   #
-    Goal score div          #
-        Goal score          #
-Controls div                   <-- Do we actually need this? I think we can just use mouse input!
-
+                Card            <-- text for now but probably card images later
+        Score div           class="score--div"
+            Score           class="score"
+Right div                   class="layout--div" id="right"
+    Deck div                class="deck--div"
+        Deck                    <-- text for now but probably card images later
+    Goal score div          class="score--div"
+        Goal score          class="score"
 
 
 /*---------------- CSS/ASSETS ---------------*/
