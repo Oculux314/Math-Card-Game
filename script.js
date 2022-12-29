@@ -1,7 +1,3 @@
-/* Helper Functions --------------------------------------------------------------------------------------------------------*/
-
-// For miscellaneous functions that are literally just there to help make another function easier to write
-
 
 /* Card Manipulator Functions ----------------------------------------------------------------------------------------------*/
 
@@ -29,7 +25,6 @@ function swapPlayerCards(player1, position1, player2, position2) {
     // Return: none
 }
 
-
 /* Logic Functions ---------------------------------------------------------------------------------------------------------*/
 
 function evaluateHand(hand) {
@@ -38,27 +33,59 @@ function evaluateHand(hand) {
     // Return: the hand value
 }
 
-
 /* Setup Functions ---------------------------------------------------------------------------------------------------------*/
 
-function createDeck() {
+function restart() {
+    // Parameters: none
+    // Actions: calls all the other setup functions when restarting a game
+    // Return: none
+
+    const deck = setUpDeck();
+    const p1Hand = setUpHand(deck);
+    const p2Hand = setUpHand(deck);
+    const goalNum = chooseGoalNumber();
+
+    takeTurn();
+}
+
+function setUpDeck() {
     // Parameters: none
     // Actions: create a 'deck' array of length 52 filled with one of each card value [0 - 51]
     // Return: the 'deck' array
+
+    const deck = [];
+
+    for (let i = 0; i < 52; i++) { // [0 - 51]
+        deck.push(i);
+    }
+
+    return deck;
 }
 
-function createhand(deck) {
+function setUpHand(deck) {
     // Parameters: (deck) a 52-length fully populated 'deck' array
     // Actions: create a 'hand' array of length 5, randomly fill it with cards from the deck, remove those cards from the deck
     // Return: the 'hand' array
+
+    const hand = [];
+
+    for (i = 1; i <= 5; i++) {
+        let index = Math.trunc(Math.random() * deck.length); // choose random card from deck
+        hand.push(deck[index]); // add to hand
+        deck.splice(index, 1); // remove from deck
+    }
+
+    return hand;
 }
 
 function chooseGoalNumber() {
     // Parameters: none
     // Actions: randomly choose a suitable 'score' number for both players to aim for
     // Return: the 'score' number
-}
 
+    const goalNum = Math.trunc(Math.random() * 1000); // [0 - 999]
+    return goalNum;
+}
 
 /* Runtime Functions -------------------------------------------------------------------------------------------------------*/
 
@@ -66,8 +93,9 @@ function takeTurn() {
     // Parameters: none
     // Actions: idk lol
     // Return: none
-}
 
+    console.log("Success!");
+}
 
 /* Render Functions --------------------------------------------------------------------------------------------------------*/
 
@@ -128,3 +156,8 @@ function onCardClick() {
     // Actions: handler for when card clicked
     // Return: id of card clicked
 }
+
+
+/* Global Calls ------------------------------------------------------------------------------------------------------------*/
+
+restart();
