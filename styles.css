@@ -1,1 +1,18 @@
-tets
+.card--rack {
+  border: 1px solid black;
+}
+
+.card--div {
+  border: 1px solid red;
+  padding: 0px;
+  margin: 2%;
+  display: inline-block;
+}
+
+.card--rack img {
+  display: block;
+}
+
+div {
+  border: 1px solid green;
+}
