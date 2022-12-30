@@ -44,6 +44,8 @@ function init() {
   const goalNum = chooseGoalNumber();
   const p1CardImg = cardIdCollector(1);
   const p2CardImg = cardIdCollector(2);
+  showSetUpCards(p1CardImg, p1Hand);
+  showSetUpCards(p2CardImg, p2Hand);
 }
 
 function setUpDeck() {
@@ -74,7 +76,14 @@ function setUpHand(deck) {
     deck.splice(index, 1); // remove from deck
   }
 
+  console.log(hand);
   return hand;
+}
+
+function showSetUpCards(imgCardArr, hand) {
+  for (let i = 0; i < imgCardArr.length; i++) {
+    cardImgSync(imgCardArr[i], hand[i]);
+  }
 }
 
 function chooseGoalNumber() {
@@ -89,7 +98,8 @@ function chooseGoalNumber() {
 function cardIdCollector(player) {
   const cardArr = [];
   for (let i = 1; i <= 5; i++) {
-    const card = document.getElementById(`p${player}--c${i}`);
+    const cardDiv = document.getElementById(`p${player}--c${i}`);
+    const card = cardDiv.children[0]; // <Img> of the Div
     cardArr.push(card);
     console.log(card);
   }
@@ -115,10 +125,14 @@ function render() {
   // Return: none
 }
 
-function renderCard(id, cardValue) {
-  // Parameters: (id) id of card element, (cardValue) card value [0 - 51] of card in that position
-  // Actions: update a single card html element
-  // Return: none
+function cardImgSync(imgTag, cardValue) {
+  const group = ["spades", "clubs", "diamonds", "hearts"];
+  const deckNum = Math.trunc(cardValue / 13);
+  const cardNum = cardValue % 13;
+  imgTag.src = `assets/${group[deckNum]}/tile${String(cardNum).padStart(
+    3,
+    "0"
+  )}.png`;
 }
 
 function renderHandScore(id, score) {
