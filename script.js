@@ -38,6 +38,7 @@ function init() {
   // Parameters: none
   // Actions: calls all the other setup functions when restarting a game
   // Return: none
+
   const deck = setUpDeck();
   const p1Hand = setUpHand(deck);
   const p2Hand = setUpHand(deck);
@@ -127,12 +128,15 @@ function render() {
 
 function cardImgSync(imgTag, cardValue) {
   const group = ["spades", "clubs", "diamonds", "hearts"];
+  const cardNames = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"];
+
   const deckNum = Math.trunc(cardValue / 13);
   const cardNum = cardValue % 13;
-  imgTag.src = `assets/${group[deckNum]}/tile${String(cardNum).padStart(
-    3,
-    "0"
-  )}.png`;
+  const cardNumPadded = String(cardNum).padStart(3, "0");
+
+  imgTag.src = `assets/${group[deckNum]}/tile${cardNumPadded}.png`; // Change image
+
+  imgTag.alt = `${cardNames[cardNum]} of ${group[deckNum]}.` // Change alt text   #accessibility
 }
 
 function renderHandScore(id, score) {

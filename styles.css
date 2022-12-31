@@ -1,18 +1,72 @@
+/* Testing */
+
+div {
+  border: 1px solid lime;
+}
+
+
+/* Layout */
+
+.layout--div {
+}
+
+#left {
+}
+
+#right {
+}
+
+.player--div {
+}
+
+
+/* Headers */
+
+.header--div {
+}
+
+.header {
+}
+
+
+/* Hand Cards */
+
 .card--rack {
-  border: 1px solid black;
 }
 
 .card--div {
-  border: 1px solid red;
   padding: 0px;
   margin: 2%;
   display: inline-block;
 }
 
-.card--rack img {
+.card--img {
   display: block;
 }
 
-div {
-  border: 1px solid green;
+
+/* Hand Scores */
+
+.score--div {
+}
+
+.score {
+}
+
+
+/* Deck */
+
+.deck--div {
+}
+
+.deck--img {
+}
+
+
+/* Goal Score */
+
+#goal--score--div {
+}
+
+#goal--score {
 }
