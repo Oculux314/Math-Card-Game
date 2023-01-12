@@ -2,71 +2,47 @@
 
 div {
   border: 1px solid lime;
-}
-
-
-/* Layout */
-
-.layout--div {
-}
-
-#left {
-}
-
-#right {
-}
-
-.player--div {
-}
-
-
-/* Headers */
-
-.header--div {
-}
-
-.header {
-}
-
-
-/* Hand Cards */
-
-.card--rack {
+  box-sizing: border-box;
 }
 
 .card--div {
   padding: 0px;
   margin: 2%;
   display: inline-block;
+  border: 1px solid red;
 }
 
 .card--img {
   display: block;
 }
 
+.layout--div {
+  display: inline-block;
+  margin: 0px;
+}
 
-/* Hand Scores */
+#left {
+  width: 80%;
+}
 
-.score--div {
+#right {
+  width: 19%;
+}
+
+#right img {
+  margin: auto;
 }
 
 .score {
+  text-align: center;
 }
 
-
-/* Deck */
-
-.deck--div {
+.card--rack {
+  display: inline-block;
+  width: 80%;
 }
 
-.deck--img {
-}
-
-
-/* Goal Score */
-
-#goal--score--div {
-}
-
-#goal--score {
+#left .score--div {
+  display: inline-block;
+  width: 19%;
 }
