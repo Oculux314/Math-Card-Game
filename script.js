@@ -30,8 +30,39 @@ function evaluateHand(hand) {
   // Parameters: (hand) a 5-length 'hand' array
   // Actions: calculate the value of the hand
   // Return: the hand value
+
+  let evaStr = '';
+  for (const card of hand.entries()) {
+    evaStr += findCardValue(card[1]);
+  }
+
+  return safeRun(evaStr);
 }
 
+function findCardValue(cardNumber) {
+  cardNumber %= 13;
+  cardNumber += 1;
+
+  const operators = {
+    11: '+',
+    12: '-',
+    13: '*'
+  };
+  if (cardNumber > 10) {
+    cardNumber = operators[cardNumber];
+  }
+
+  return cardNumber;
+}
+
+function safeRun(string) {
+  try {
+    return math.evaluate(string);
+  } catch {
+    return NaN;
+  }
+
+}
 /* Setup Functions ---------------------------------------------------------------------------------------------------------*/
 
 function init() {
@@ -42,11 +73,17 @@ function init() {
   const deck = setUpDeck();
   const p1Hand = setUpHand(deck);
   const p2Hand = setUpHand(deck);
-  const goalNum = chooseGoalNumber();
+
   const p1CardImg = cardIdCollector(1);
   const p2CardImg = cardIdCollector(2);
   showSetUpCards(p1CardImg, p1Hand);
   showSetUpCards(p2CardImg, p2Hand);
+
+  const goalNum = chooseGoalNumber();
+  const p1Score = evaluateHand(p1Hand);
+  const p2Score = evaluateHand(p2Hand);
+  // Show the p1 & p2 scores
+  console.log(p1Score, p2Score);
 }
 
 function setUpDeck() {
@@ -76,8 +113,6 @@ function setUpHand(deck) {
     hand.push(deck[index]); // add to hand
     deck.splice(index, 1); // remove from deck
   }
-
-  console.log(hand);
   return hand;
 }
 
@@ -102,7 +137,6 @@ function cardIdCollector(player) {
     const cardDiv = document.getElementById(`p${player}--c${i}`);
     const card = cardDiv.children[0]; // <Img> of the Div
     cardArr.push(card);
-    console.log(card);
   }
 
   return cardArr;
