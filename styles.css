@@ -1,8 +1,21 @@
-/* Testing */
+body {
+  font-size: 0em;
+  border: 1px solid pink;
+  margin: 0px;
+}
+
+p {
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 24px;
+}
 
 div {
   border: 1px solid lime;
   box-sizing: border-box;
+  vertical-align: top;
 }
 
 .card--div {
@@ -26,7 +39,7 @@ div {
 }
 
 #right {
-  width: 19%;
+  width: 20%;
 }
 
 #right img {
@@ -44,5 +57,5 @@ div {
 
 #left .score--div {
   display: inline-block;
-  width: 19%;
+  width: 20%;
 }
