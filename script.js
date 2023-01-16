@@ -24,6 +24,28 @@ function swapPlayerCards(player1, position1, player2, position2) {
   // Return: none
 }
 
+function slotMaker(parent, player, card) {
+  // Adding a slot div
+  const imgDiv = document.createElement("div");
+  parent.appendChild(imgDiv);
+  imgDiv.setAttribute("id", `p${player}--c${card}`);
+  imgDiv.setAttribute("class", `card--div`);
+  const img = document.createElement("img");
+  imgDiv.appendChild(img);
+}
+
+function createHandSlots(player, len) {
+  // Setting up the parent div + IDs
+  const playerDiv = document.getElementById(`player--${player}`);
+  const cardRack = playerDiv.children[1];
+
+  for (let i = 0; i < len; i++) {
+    slotMaker(cardRack, player, i + 1);
+  }
+}
+
+createHandSlots(1, 10);
+createHandSlots(2, 10);
 /* Logic Functions ---------------------------------------------------------------------------------------------------------*/
 
 function evaluateHand(hand) {
@@ -31,7 +53,7 @@ function evaluateHand(hand) {
   // Actions: calculate the value of the hand
   // Return: the hand value
 
-  let evaStr = '';
+  let evaStr = "";
   for (const card of hand.entries()) {
     evaStr += findCardValue(card[1]);
   }
@@ -44,9 +66,9 @@ function findCardValue(cardNumber) {
   cardNumber += 1;
 
   const operators = {
-    11: '+',
-    12: '-',
-    13: '*'
+    11: "+",
+    12: "-",
+    13: "*",
   };
   if (cardNumber > 10) {
     cardNumber = operators[cardNumber];
@@ -61,7 +83,6 @@ function safeRun(string) {
   } catch {
     return NaN;
   }
-
 }
 /* Setup Functions ---------------------------------------------------------------------------------------------------------*/
 
@@ -162,7 +183,21 @@ function render() {
 
 function cardImgSync(imgTag, cardValue) {
   const group = ["spades", "clubs", "diamonds", "hearts"];
-  const cardNames = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"];
+  const cardNames = [
+    "Ace",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "Jack",
+    "Queen",
+    "King",
+  ];
 
   const deckNum = Math.trunc(cardValue / 13);
   const cardNum = cardValue % 13;
@@ -170,7 +205,7 @@ function cardImgSync(imgTag, cardValue) {
 
   imgTag.src = `assets/${group[deckNum]}/tile${cardNumPadded}.png`; // Change image
 
-  imgTag.alt = `${cardNames[cardNum]} of ${group[deckNum]}.` // Change alt text   #accessibility
+  imgTag.alt = `${cardNames[cardNum]} of ${group[deckNum]}.`; // Change alt text   #accessibility
 }
 
 function renderHandScore(id, score) {
