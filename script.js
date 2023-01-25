@@ -24,6 +24,16 @@ function swapPlayerCards(player1, position1, player2, position2) {
   // Return: none
 }
 
+function shuffle(deck){
+  const shuffledDeck = [];
+  for (let i = 0; i < deck.length; i++){
+    const index = Math.trunc(Math.random() * deck.length);
+    shuffledDeck.push(deck.splice(index, 1)[0]); 
+  }
+  console.log(shuffledDeck);
+  return shuffledDeck;
+}
+
 /* Logic Functions ---------------------------------------------------------------------------------------------------------*/
 
 function evaluateHand(hand) {
@@ -68,11 +78,15 @@ function init() {
   // Parameters: none
   // Actions: calls all the other setup functions when restarting a game
   // Return: none
+  let activePlayer = 0;
+  let phase = 1;
   const handSize = 7;
   createHandSlots(1, handSize);
   createHandSlots(2, handSize);
 
-  const deck = setUpDeck();
+  let deck = setUpDeck();
+  deck = shuffle(deck);
+  const discards = setUpDiscards();
   const p1Hand = setUpHand(deck, handSize);
   const p2Hand = setUpHand(deck, handSize);
 
@@ -121,6 +135,11 @@ function setUpDeck() {
   }
 
   return deck;
+}
+
+function setUpDiscards() {
+  const discardDeck = [];
+  return discardDeck;
 }
 
 function setUpHand(deck, len) {
@@ -247,12 +266,18 @@ function onDeckClick() {
   // Parameters: none
   // Actions: handler for when deck clicked
   // Return: none
+  document.querySelector('deck--img').addEventListener('click', onCardClick){
+    
+  }
+
+
 }
 
 function onCardClick() {
   // Parameters: none
   // Actions: handler for when card clicked
   // Return: id of card clicked
+
 }
 
 /* Global Calls ------------------------------------------------------------------------------------------------------------*/
