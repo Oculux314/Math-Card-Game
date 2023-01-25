@@ -24,28 +24,6 @@ function swapPlayerCards(player1, position1, player2, position2) {
   // Return: none
 }
 
-function slotMaker(parent, player, card) {
-  // Adding a slot div
-  const imgDiv = document.createElement("div");
-  parent.appendChild(imgDiv);
-  imgDiv.setAttribute("id", `p${player}--c${card}`);
-  imgDiv.setAttribute("class", `card--div`);
-  const img = document.createElement("img");
-  imgDiv.appendChild(img);
-}
-
-function createHandSlots(player, len) {
-  // Setting up the parent div + IDs
-  const playerDiv = document.getElementById(`player--${player}`);
-  const cardRack = playerDiv.children[1];
-
-  for (let i = 0; i < len; i++) {
-    slotMaker(cardRack, player, i + 1);
-  }
-}
-
-createHandSlots(1, 10);
-createHandSlots(2, 10);
 /* Logic Functions ---------------------------------------------------------------------------------------------------------*/
 
 function evaluateHand(hand) {
@@ -90,13 +68,16 @@ function init() {
   // Parameters: none
   // Actions: calls all the other setup functions when restarting a game
   // Return: none
+  const handSize = 7;
+  createHandSlots(1, handSize);
+  createHandSlots(2, handSize);
 
   const deck = setUpDeck();
-  const p1Hand = setUpHand(deck);
-  const p2Hand = setUpHand(deck);
+  const p1Hand = setUpHand(deck, handSize);
+  const p2Hand = setUpHand(deck, handSize);
 
-  const p1CardImg = cardIdCollector(1);
-  const p2CardImg = cardIdCollector(2);
+  const p1CardImg = cardIdCollector(1, handSize);
+  const p2CardImg = cardIdCollector(2, handSize);
   showSetUpCards(p1CardImg, p1Hand);
   showSetUpCards(p2CardImg, p2Hand);
 
@@ -105,6 +86,26 @@ function init() {
   const p2Score = evaluateHand(p2Hand);
   // Show the p1 & p2 scores
   console.log(p1Score, p2Score);
+}
+
+function slotMaker(parent, player, card) {
+  // Adding a slot div
+  const imgDiv = document.createElement("div");
+  parent.appendChild(imgDiv);
+  imgDiv.setAttribute("id", `p${player}--c${card}`);
+  imgDiv.setAttribute("class", `card--div`);
+  const img = document.createElement("img");
+  imgDiv.appendChild(img);
+}
+
+function createHandSlots(player, len) {
+  // Setting up the parent div + IDs
+  const playerDiv = document.getElementById(`player--${player}`);
+  const cardRack = playerDiv.children[1];
+
+  for (let i = 0; i < len; i++) {
+    slotMaker(cardRack, player, i + 1);
+  }
 }
 
 function setUpDeck() {
@@ -122,14 +123,14 @@ function setUpDeck() {
   return deck;
 }
 
-function setUpHand(deck) {
+function setUpHand(deck, len) {
   // Parameters: (deck) a 52-length fully populated 'deck' array
   // Actions: create a 'hand' array of length 5, randomly fill it with cards from the deck, remove those cards from the deck
   // Return: the 'hand' array
 
   const hand = [];
 
-  for (i = 1; i <= 5; i++) {
+  for (i = 1; i <= len; i++) {
     let index = Math.trunc(Math.random() * deck.length); // choose random card from deck
     hand.push(deck[index]); // add to hand
     deck.splice(index, 1); // remove from deck
@@ -152,9 +153,9 @@ function chooseGoalNumber() {
   return goalNum;
 }
 
-function cardIdCollector(player) {
+function cardIdCollector(player, len) {
   const cardArr = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= len; i++) {
     const cardDiv = document.getElementById(`p${player}--c${i}`);
     const card = cardDiv.children[0]; // <Img> of the Div
     cardArr.push(card);
