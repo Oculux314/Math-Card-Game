@@ -262,21 +262,19 @@ function changeDeck(card) {
 
 // How do click event handlers work in JS??
 
-function onDeckClick() {
+function onDeckClick(deck) {
   // Parameters: none
   // Actions: handler for when deck clicked
   // Return: none
-  document.querySelector('deck--img').addEventListener('click', onCardClick){
-    
-  }
-
+  document.querySelector('deck--img').addEventListener('click',deck, onDeckClick);
 
 }
 
-function onCardClick() {
+function onCardClick(deck) {
   // Parameters: none
   // Actions: handler for when card clicked
   // Return: id of card clicked
+
 
 }
 
