@@ -1,5 +1,164 @@
-/* Card Manipulator Functions ----------------------------------------------------------------------------------------------*/
 
+/* SETUP FUNCTIONS ---------------------------------------------------------------------------------------------------------*/
+
+
+function init() {
+  // Inputs:  none
+  // Action:  calls all the other setup functions when restarting a game
+  // Return:  none
+
+  let activePlayer = 0;
+  let phase = 1;
+
+  const handSize = 7;
+
+  // Initialise card arrays
+  let deck = setUpDeck();
+  deck = shuffle(deck);
+  const discards = setUpDiscards();
+  const p1Hand = setUpHand(deck, handSize);
+  const p2Hand = setUpHand(deck, handSize);
+
+  // Creating DOM hand containers
+  createHandSlots(1, handSize);
+  createHandSlots(2, handSize);
+
+  // Rendering hand cards
+  const p1CardImg = cardDOMCollator(1, handSize);
+  const p2CardImg = cardDOMCollator(2, handSize);
+  renderHand(p1CardImg, p1Hand);
+  renderHand(p2CardImg, p2Hand);
+
+  // Choosing goal score
+  const goalNum = chooseGoalNumber();
+
+  // Evaluating and rendering hand scores
+  const p1Score = evaluateHand(p1Hand);
+  const p2Score = evaluateHand(p2Hand);
+      // NEEDED: 2x render hand scores
+}
+
+
+function setUpDeck() {
+  // Inputs:  none
+  // Action:  create a 'deck' array of length 52 filled with one of each card value [0 - 51]
+  // Return:  the deck array
+
+  const deck = [];
+
+  // Populate empty deck in order [0 - 51]
+  for (let i = 0; i < 52; i++) {
+    deck.push(i);
+  }
+
+  return deck;
+}
+
+
+function setUpDiscards() {
+  // Inputs:  none
+  // Action:  create an empty 'discards' array
+  // Return:  the discards array
+
+  // Empty
+  const discardDeck = [];
+  return discardDeck;
+}
+
+
+function setUpHand(deck, len) {
+  // Inputs:  (deck) a 52-length fully populated 'deck' array
+  //          (len) the number of cards in each hand
+  // Action:  create a 'hand' array of variable length, randomly fill it with cards from the deck, remove those cards from the deck
+  // Return:  the hand array
+
+  const hand = [];
+
+  for (i = 1; i <= len; i++) {
+    let index = Math.trunc(Math.random() * deck.length); // choose random card from deck
+    hand.push(deck[index]);                              // add to hand
+    deck.splice(index, 1);                               // remove from deck
+  }
+
+  return hand;
+}
+
+
+function createHandSlots(player, len) {
+  // Inputs:  (player) the player [1 - 2] to create slots for
+  //          (len) the number of slots to make
+  // Action:  creates a variable number of DOM div nested images 'hand card slots' for specified player
+  // Return:  none
+
+  // Getting the cardRack DOM element
+  const playerDiv = document.getElementById(`player--${player}`);
+  const cardRack = playerDiv.children[1];
+
+  // Making slots
+  for (let i = 0; i < len; i++) {
+    slotMaker(cardRack, player, i + 1);
+  }
+}
+
+
+function slotMaker(parent, player, card) {
+  // Inputs:  (parent) the card rack DOM element to add the slot to
+  //          (player) the player[1 - 2] the slot is for
+  //          (card) which hand slot the card is for [1,2,3...]
+  // Action:  creates a single div nested image 'hand card slot' in specified parent card rack
+  // Return:  none
+
+  // Div
+  const imgDiv = document.createElement("div");
+  parent.appendChild(imgDiv);
+
+  // Img
+  const img = document.createElement("img");
+  imgDiv.appendChild(img);
+
+  // Class + ID
+  imgDiv.setAttribute("id", `p${player}--c${card}`);
+  imgDiv.setAttribute("class", `card--div`);
+}
+
+
+function cardDOMCollator(player, len) {
+  // Inputs:  (player) player [1 - 2] to collate card DOM elements from
+  //          (len) the number of cards in the player's hand
+  // Action:  collates all the card img DOM elements for a specific player hand into an array
+  // Return:  the img element array
+
+  const cardArr = [];
+
+  for (let i = 1; i <= len; i++) {
+    const cardDiv = document.getElementById(`p${player}--c${i}`); // Get div
+    const card = cardDiv.children[0];                             // Get img
+    cardArr.push(card);                                           // Add img to array
+  }
+
+  return cardArr;
+}
+
+
+function chooseGoalNumber() {
+  // Inputs:  none
+  // Action:  randomly choose a suitable goal score number for both players to aim for
+  // Return:  the goal number
+
+  const goalNum = Math.trunc(Math.random() * 1000); // [0 - 999]
+  return goalNum;
+}
+
+
+
+/* RUNTIME FUNCTIONS -------------------------------------------------------------------------------------------------------*/
+
+
+
+/* CARD MANIPULATOR FUNCTIONS ----------------------------------------------------------------------------------------------*/
+
+
+/*
 function addCardToDeck(card) {
   // Parameters: (card) card value to add to deck [0 - 51]
   // Actions: add the specifed card to the end of the deck
@@ -23,41 +182,62 @@ function swapPlayerCards(player1, position1, player2, position2) {
   // Actions: swap the card values at these two positions
   // Return: none
 }
+*/
 
-function shuffle(deck){
+
+function shuffle(deck) {
+  // Inputs:  (deck) the array to be shuffled
+  // Action:  randomises the order of elements in an array (e.g. deck)
+  // Return:  the shuffled deck
+
   const shuffledDeck = [];
+
   for (let i = 0; i < deck.length; i++){
-    const index = Math.trunc(Math.random() * deck.length);
-    shuffledDeck.push(deck.splice(index, 1)[0]); 
+    const index = Math.trunc(Math.random() * deck.length); // Choose random card
+    shuffledDeck.push(deck.splice(index, 1)[0]);           // Add to new, remove from old
   }
-  console.log(shuffledDeck);
+
   return shuffledDeck;
 }
 
-/* Logic Functions ---------------------------------------------------------------------------------------------------------*/
+
+
+/* LOGIC FUNCTIONS ---------------------------------------------------------------------------------------------------------*/
+
 
 function evaluateHand(hand) {
-  // Parameters: (hand) a 5-length 'hand' array
-  // Actions: calculate the value of the hand
-  // Return: the hand value
+  // Inputs:  (hand) a hand array
+  // Action:  evaluate the score of the hand
+  // Return:  the hand score
 
   let evaStr = "";
+
+  // hand array --> string
   for (const card of hand.entries()) {
     evaStr += findCardValue(card[1]);
   }
 
-  return safeRun(evaStr);
+  return safeRun(evaStr); // Evaluate
 }
 
+
 function findCardValue(cardNumber) {
+  // Inputs:  (cardNumber) a numerical raw card value
+  // Action:  translates card value to appropriate string value for calculation
+  // Return:  the hand score
+
+  // Get raw card number, independent of suit [1 - 13]
   cardNumber %= 13;
   cardNumber += 1;
 
+  // Picture card library
   const operators = {
-    11: "+",
-    12: "-",
-    13: "*",
+    11: "+", // J
+    12: "-", // Q
+    13: "*", // K
   };
+
+  // Picture card handler
   if (cardNumber > 10) {
     cardNumber = operators[cardNumber];
   }
@@ -65,169 +245,54 @@ function findCardValue(cardNumber) {
   return cardNumber;
 }
 
+
 function safeRun(string) {
+  // Inputs:  (string) string containing mathematical expression to evaluate
+  // Action:  safely evaluates a mathmatical expression, with error handling
+  // Return:  the value of the expression, or NaN if expression invalid
+
   try {
     return math.evaluate(string);
   } catch {
     return NaN;
   }
 }
-/* Setup Functions ---------------------------------------------------------------------------------------------------------*/
 
-function init() {
+
+
+/* UI FUNCTIONS ------------------------------------------------------------------------------------------------------------*/
+
+
+/*
+function onDeckClick() {
   // Parameters: none
-  // Actions: calls all the other setup functions when restarting a game
-  // Return: none
-  let activePlayer = 0;
-  let phase = 1;
-  const handSize = 7;
-  createHandSlots(1, handSize);
-  createHandSlots(2, handSize);
-
-  let deck = setUpDeck();
-  deck = shuffle(deck);
-  const discards = setUpDiscards();
-  const p1Hand = setUpHand(deck, handSize);
-  const p2Hand = setUpHand(deck, handSize);
-
-  const p1CardImg = cardIdCollector(1, handSize);
-  const p2CardImg = cardIdCollector(2, handSize);
-  showSetUpCards(p1CardImg, p1Hand);
-  showSetUpCards(p2CardImg, p2Hand);
-
-  const goalNum = chooseGoalNumber();
-  const p1Score = evaluateHand(p1Hand);
-  const p2Score = evaluateHand(p2Hand);
-  // Show the p1 & p2 scores
-  console.log(p1Score, p2Score);
-}
-
-function slotMaker(parent, player, card) {
-  // Adding a slot div
-  const imgDiv = document.createElement("div");
-  parent.appendChild(imgDiv);
-  imgDiv.setAttribute("id", `p${player}--c${card}`);
-  imgDiv.setAttribute("class", `card--div`);
-  const img = document.createElement("img");
-  imgDiv.appendChild(img);
-}
-
-function createHandSlots(player, len) {
-  // Setting up the parent div + IDs
-  const playerDiv = document.getElementById(`player--${player}`);
-  const cardRack = playerDiv.children[1];
-
-  for (let i = 0; i < len; i++) {
-    slotMaker(cardRack, player, i + 1);
-  }
-}
-
-function setUpDeck() {
-  // Parameters: none
-  // Actions: create a 'deck' array of length 52 filled with one of each card value [0 - 51]
-  // Return: the 'deck' array
-
-  const deck = [];
-
-  for (let i = 0; i < 52; i++) {
-    // [0 - 51]
-    deck.push(i);
-  }
-
-  return deck;
-}
-
-function setUpDiscards() {
-  const discardDeck = [];
-  return discardDeck;
-}
-
-function setUpHand(deck, len) {
-  // Parameters: (deck) a 52-length fully populated 'deck' array
-  // Actions: create a 'hand' array of length 5, randomly fill it with cards from the deck, remove those cards from the deck
-  // Return: the 'hand' array
-
-  const hand = [];
-
-  for (i = 1; i <= len; i++) {
-    let index = Math.trunc(Math.random() * deck.length); // choose random card from deck
-    hand.push(deck[index]); // add to hand
-    deck.splice(index, 1); // remove from deck
-  }
-  return hand;
-}
-
-function showSetUpCards(imgCardArr, hand) {
-  for (let i = 0; i < imgCardArr.length; i++) {
-    cardImgSync(imgCardArr[i], hand[i]);
-  }
-}
-
-function chooseGoalNumber() {
-  // Parameters: none
-  // Actions: randomly choose a suitable 'score' number for both players to aim for
-  // Return: the 'score' number
-
-  const goalNum = Math.trunc(Math.random() * 1000); // [0 - 999]
-  return goalNum;
-}
-
-function cardIdCollector(player, len) {
-  const cardArr = [];
-  for (let i = 1; i <= len; i++) {
-    const cardDiv = document.getElementById(`p${player}--c${i}`);
-    const card = cardDiv.children[0]; // <Img> of the Div
-    cardArr.push(card);
-  }
-
-  return cardArr;
-}
-
-/* Runtime Functions -------------------------------------------------------------------------------------------------------*/
-
-function switchPlayer() {
-  // Parameters: none
-  // Actions: idk lol
-  // Return: none
-
-  console.log("Success!");
-}
-
-/* Render Functions --------------------------------------------------------------------------------------------------------*/
-
-function render() {
-  // Parameters: tbc
-  // Actions: update all the html and css elements
+  // Actions: handler for when deck clicked
   // Return: none
 }
 
-function cardImgSync(imgTag, cardValue) {
-  const group = ["spades", "clubs", "diamonds", "hearts"];
-  const cardNames = [
-    "Ace",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "Jack",
-    "Queen",
-    "King",
-  ];
+function onCardClick(deck) {
+  // Parameters: none
+  // Actions: handler for when card clicked
+  // Return: id of card clicked
+}
+*/
 
-  const deckNum = Math.trunc(cardValue / 13);
-  const cardNum = cardValue % 13;
-  const cardNumPadded = String(cardNum).padStart(3, "0");
 
-  imgTag.src = `assets/${group[deckNum]}/tile${cardNumPadded}.png`; // Change image
+function setUpEventListeners() {
+  // Inputs:  none
+  // Action:  central function to add event listeners
+  // Return:  none
 
-  imgTag.alt = `${cardNames[cardNum]} of ${group[deckNum]}.`; // Change alt text   #accessibility
+  document.querySelector('deck--img').addEventListener('click', deck, onDeckClick);
+      // INCOMPLETE
 }
 
+
+
+/* RENDER FUNCTIONS --------------------------------------------------------------------------------------------------------*/
+
+
+/*
 function renderHandScore(id, score) {
   // Parameters: (id) id of score element, (score) score of current hand
   // Actions: update a single score html element
@@ -257,26 +322,59 @@ function changeDeck(card) {
   // Actions: switch deck card graphic to specified value
   // Return: none
 }
+*/
 
-/* UI Functions ------------------------------------------------------------------------------------------------------------*/
 
-// How do click event handlers work in JS??
+function renderHand(imgCardArr, hand) {
+  // Inputs:  (imgCardArr) array containing each img DOM element for a player's hand
+  //          (hand) array containing a player's hand card values
+  // Action:  Renders an entire hand
+  // Return:  none
 
-function onDeckClick(deck) {
-  // Parameters: none
-  // Actions: handler for when deck clicked
-  // Return: none
-  document.querySelector('deck--img').addEventListener('click',deck, onDeckClick);
-
+  for (let i = 0; i < imgCardArr.length; i++) {
+    renderCard(imgCardArr[i], hand[i]);
+  }
 }
 
-function onCardClick(deck) {
-  // Parameters: none
-  // Actions: handler for when card clicked
-  // Return: id of card clicked
 
+function renderCard(imgTag, cardValue) {
+  // Inputs:  (imgTag) the img DOM element to be updated
+  //          (cardValue) the card value to update to
+  // Action:  Renders a single card
+  // Return:  none
 
+  // Name library for suits and numbers
+  const group = ["spades", "clubs", "diamonds", "hearts"];
+  const cardNames = [
+    "Ace",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "Jack",
+    "Queen",
+    "King",
+  ];
+
+  // Get suit
+  const suitNum = Math.trunc(cardValue / 13);
+
+  // Get num
+  const cardNum = cardValue % 13;
+  const cardNumPadded = String(cardNum).padStart(3, "0");
+
+  // Rendering
+  imgTag.src = `assets/${group[suitNum]}/tile${cardNumPadded}.png`; // Change image
+  imgTag.alt = `${cardNames[cardNum]} of ${group[suitNum]}.`;       // Change alt text   #accessibility
 }
 
-/* Global Calls ------------------------------------------------------------------------------------------------------------*/
+
+
+/* GLOBAL VARIABLES --------------------------------------------------------------------------------------------------------*/
+
 init();
