@@ -8,7 +8,7 @@ function init() {
   // Return:  none
 
   let activePlayer = 0;
-  let phase = 1;
+  // let phase = 0;
 
   const handSize = 7;
 
@@ -18,6 +18,9 @@ function init() {
   const discards = setUpDiscards();
   const p1Hand = setUpHand(deck, handSize);
   const p2Hand = setUpHand(deck, handSize);
+  console.log(p1Hand);
+  swapPlayerCards(p1Hand, p1Hand, 0, 5);
+  console.log(p1Hand);
 
   // Creating DOM hand containers
   createHandSlots(1, handSize);
@@ -75,7 +78,7 @@ function setUpHand(deck, len) {
   const hand = [];
 
   for (i = 1; i <= len; i++) {
-    let index = Math.trunc(Math.random() * deck.length); // choose random card from deck
+    const index = deck.length - 1;                       // pick top card from deck
     hand.push(deck[index]);                              // add to hand
     deck.splice(index, 1);                               // remove from deck
   }
@@ -176,13 +179,17 @@ function setPlayerCard(player, position, card) {
   // Actions: set the specified array element to the specified card value
   // Return: the original card value at that position
 }
+*/
 
-function swapPlayerCards(player1, position1, player2, position2) {
+function swapPlayerCards(arr1, arr2, pos1, pos2) {
   // Parameters: (player1,position1) position of card 1, (player2,position2) position of card 2
   // Actions: swap the card values at these two positions
   // Return: none
+  const temp = arr1[pos1];
+  arr1[pos1] = arr2[pos2];
+  arr2[pos2] = temp;
+  
 }
-*/
 
 
 function shuffle(deck) {
