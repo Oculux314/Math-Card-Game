@@ -1,44 +1,55 @@
 
 /* SETUP FUNCTIONS ---------------------------------------------------------------------------------------------------------*/
 
+// Declaring global variables
+let 
+activePlayer, 
+handSize, 
+deck, 
+discards, 
+p1Hand,
+p2Hand, 
+p1CardImg,
+p2CardImg,
+goalNum,
+p1Score,
+p2Score;
 
 function init() {
   // Inputs:  none
   // Action:  calls all the other setup functions when restarting a game
   // Return:  none
 
-  let activePlayer = 0;
+  activePlayer = 0;
   // let phase = 0;
 
-  const handSize = 7;
+  handSize = 7;
 
   // Initialise card arrays
-  let deck = setUpDeck();
-  deck = shuffle(deck);
-  const discards = setUpDiscards();
-  const p1Hand = setUpHand(deck, handSize);
-  const p2Hand = setUpHand(deck, handSize);
-  console.log(p1Hand);
-  swapPlayerCards(p1Hand, p1Hand, 0, 5);
-  console.log(p1Hand);
+  deck = shuffle(setUpDeck());
+  discards = setUpDiscards();
+  p1Hand = setUpHand(deck, handSize);
+  p2Hand = setUpHand(deck, handSize);
 
   // Creating DOM hand containers
   createHandSlots(1, handSize);
   createHandSlots(2, handSize);
 
   // Rendering hand cards
-  const p1CardImg = cardDOMCollator(1, handSize);
-  const p2CardImg = cardDOMCollator(2, handSize);
+  p1CardImg = cardDOMCollator(1, handSize);
+  p2CardImg = cardDOMCollator(2, handSize);
   renderHand(p1CardImg, p1Hand);
   renderHand(p2CardImg, p2Hand);
 
   // Choosing goal score
-  const goalNum = chooseGoalNumber();
+  goalNum = chooseGoalNumber();
 
   // Evaluating and rendering hand scores
-  const p1Score = evaluateHand(p1Hand);
-  const p2Score = evaluateHand(p2Hand);
+  p1Score = evaluateHand(p1Hand);
+  p2Score = evaluateHand(p2Hand);
       // NEEDED: 2x render hand scores
+      
+  setUpEventListeners();
 }
 
 
@@ -157,7 +168,6 @@ function chooseGoalNumber() {
 /* RUNTIME FUNCTIONS -------------------------------------------------------------------------------------------------------*/
 
 
-
 /* CARD MANIPULATOR FUNCTIONS ----------------------------------------------------------------------------------------------*/
 
 
@@ -268,29 +278,27 @@ function safeRun(string) {
 
 
 /* UI FUNCTIONS ------------------------------------------------------------------------------------------------------------*/
-
-
-/*
 function onDeckClick() {
   // Parameters: none
   // Actions: handler for when deck clicked
   // Return: none
+  renderCard(document.getElementById('deck--img'), deck[deck.length-1]);
+  console.log('yes');
 }
-
 function onCardClick(deck) {
   // Parameters: none
   // Actions: handler for when card clicked
   // Return: id of card clicked
-}
-*/
 
+  
+}
 
 function setUpEventListeners() {
   // Inputs:  none
   // Action:  central function to add event listeners
   // Return:  none
 
-  document.querySelector('deck--img').addEventListener('click', deck, onDeckClick);
+  document.getElementById('deck--img').addEventListener('click', onDeckClick);
       // INCOMPLETE
 }
 
