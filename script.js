@@ -1,19 +1,4 @@
-
 /* SETUP FUNCTIONS ---------------------------------------------------------------------------------------------------------*/
-
-// Declaring global variables
-let 
-activePlayer, 
-handSize, 
-deck, 
-discards, 
-p1Hand,
-p2Hand, 
-p1CardImg,
-p2CardImg,
-goalNum,
-p1Score,
-p2Score;
 
 function init() {
   // Inputs:  none
@@ -47,11 +32,10 @@ function init() {
   // Evaluating and rendering hand scores
   p1Score = evaluateHand(p1Hand);
   p2Score = evaluateHand(p2Hand);
-      // NEEDED: 2x render hand scores
-      
+  // NEEDED: 2x render hand scores
+
   setUpEventListeners();
 }
-
 
 function setUpDeck() {
   // Inputs:  none
@@ -68,7 +52,6 @@ function setUpDeck() {
   return deck;
 }
 
-
 function setUpDiscards() {
   // Inputs:  none
   // Action:  create an empty 'discards' array
@@ -79,7 +62,6 @@ function setUpDiscards() {
   return discardDeck;
 }
 
-
 function setUpHand(deck, len) {
   // Inputs:  (deck) a 52-length fully populated 'deck' array
   //          (len) the number of cards in each hand
@@ -89,14 +71,13 @@ function setUpHand(deck, len) {
   const hand = [];
 
   for (i = 1; i <= len; i++) {
-    const index = deck.length - 1;                       // pick top card from deck
-    hand.push(deck[index]);                              // add to hand
-    deck.splice(index, 1);                               // remove from deck
+    const index = deck.length - 1; // pick top card from deck
+    hand.push(deck[index]); // add to hand
+    deck.splice(index, 1); // remove from deck
   }
 
   return hand;
 }
-
 
 function createHandSlots(player, len) {
   // Inputs:  (player) the player [1 - 2] to create slots for
@@ -113,7 +94,6 @@ function createHandSlots(player, len) {
     slotMaker(cardRack, player, i + 1);
   }
 }
-
 
 function slotMaker(parent, player, card) {
   // Inputs:  (parent) the card rack DOM element to add the slot to
@@ -135,7 +115,6 @@ function slotMaker(parent, player, card) {
   imgDiv.setAttribute("class", `card--div`);
 }
 
-
 function cardDOMCollator(player, len) {
   // Inputs:  (player) player [1 - 2] to collate card DOM elements from
   //          (len) the number of cards in the player's hand
@@ -146,13 +125,12 @@ function cardDOMCollator(player, len) {
 
   for (let i = 1; i <= len; i++) {
     const cardDiv = document.getElementById(`p${player}--c${i}`); // Get div
-    const card = cardDiv.children[0];                             // Get img
-    cardArr.push(card);                                           // Add img to array
+    const card = cardDiv.children[0]; // Get img
+    cardArr.push(card); // Add img to array
   }
 
   return cardArr;
 }
-
 
 function chooseGoalNumber() {
   // Inputs:  none
@@ -163,13 +141,9 @@ function chooseGoalNumber() {
   return goalNum;
 }
 
-
-
 /* RUNTIME FUNCTIONS -------------------------------------------------------------------------------------------------------*/
 
-
 /* CARD MANIPULATOR FUNCTIONS ----------------------------------------------------------------------------------------------*/
-
 
 /*
 function addCardToDeck(card) {
@@ -198,9 +172,7 @@ function swapPlayerCards(arr1, arr2, pos1, pos2) {
   const temp = arr1[pos1];
   arr1[pos1] = arr2[pos2];
   arr2[pos2] = temp;
-  
 }
-
 
 function shuffle(deck) {
   // Inputs:  (deck) the array to be shuffled
@@ -209,18 +181,15 @@ function shuffle(deck) {
 
   const shuffledDeck = [];
 
-  for (let i = 0; i < deck.length; i++){
+  for (let i = 0; i < deck.length; i++) {
     const index = Math.trunc(Math.random() * deck.length); // Choose random card
-    shuffledDeck.push(deck.splice(index, 1)[0]);           // Add to new, remove from old
+    shuffledDeck.push(deck.splice(index, 1)[0]); // Add to new, remove from old
   }
 
   return shuffledDeck;
 }
 
-
-
 /* LOGIC FUNCTIONS ---------------------------------------------------------------------------------------------------------*/
-
 
 function evaluateHand(hand) {
   // Inputs:  (hand) a hand array
@@ -236,7 +205,6 @@ function evaluateHand(hand) {
 
   return safeRun(evaStr); // Evaluate
 }
-
 
 function findCardValue(cardNumber) {
   // Inputs:  (cardNumber) a numerical raw card value
@@ -262,7 +230,6 @@ function findCardValue(cardNumber) {
   return cardNumber;
 }
 
-
 function safeRun(string) {
   // Inputs:  (string) string containing mathematical expression to evaluate
   // Action:  safely evaluates a mathmatical expression, with error handling
@@ -275,22 +242,25 @@ function safeRun(string) {
   }
 }
 
-
-
 /* UI FUNCTIONS ------------------------------------------------------------------------------------------------------------*/
 function onDeckClick() {
   // Parameters: none
   // Actions: handler for when deck clicked
   // Return: none
-  renderCard(document.getElementById('deck--img'), deck[deck.length-1]);
-  console.log('yes');
+  renderCard(this, deck[deck.length - 1]);
 }
-function onCardClick(deck) {
+function onCardClick() {
   // Parameters: none
   // Actions: handler for when card clicked
   // Return: id of card clicked
 
-  
+  console.log(this.id);
+  const cardID = this.id;
+  const cardIndex = Number(cardID.substr(5)) - 1;
+  const player = cardID.substr(0, 2);
+  console.log(cardIndex);
+  console.log(player);
+  swapPlayerCards(`${player}Hand`, p2Hand, cardIndex, 1);
 }
 
 function setUpEventListeners() {
@@ -298,14 +268,14 @@ function setUpEventListeners() {
   // Action:  central function to add event listeners
   // Return:  none
 
-  document.getElementById('deck--img').addEventListener('click', onDeckClick);
-      // INCOMPLETE
+  document.getElementById("deck--img").addEventListener("click", onDeckClick);
+  Array.from(document.querySelectorAll(".card--div"), (el) =>
+    el.addEventListener("click", onCardClick)
+  );
+  // INCOMPLETE
 }
 
-
-
 /* RENDER FUNCTIONS --------------------------------------------------------------------------------------------------------*/
-
 
 /*
 function renderHandScore(id, score) {
@@ -339,7 +309,6 @@ function changeDeck(card) {
 }
 */
 
-
 function renderHand(imgCardArr, hand) {
   // Inputs:  (imgCardArr) array containing each img DOM element for a player's hand
   //          (hand) array containing a player's hand card values
@@ -350,7 +319,6 @@ function renderHand(imgCardArr, hand) {
     renderCard(imgCardArr[i], hand[i]);
   }
 }
-
 
 function renderCard(imgTag, cardValue) {
   // Inputs:  (imgTag) the img DOM element to be updated
@@ -385,11 +353,22 @@ function renderCard(imgTag, cardValue) {
 
   // Rendering
   imgTag.src = `assets/${group[suitNum]}/tile${cardNumPadded}.png`; // Change image
-  imgTag.alt = `${cardNames[cardNum]} of ${group[suitNum]}.`;       // Change alt text   #accessibility
+  imgTag.alt = `${cardNames[cardNum]} of ${group[suitNum]}.`; // Change alt text   #accessibility
 }
 
-
-
 /* GLOBAL VARIABLES --------------------------------------------------------------------------------------------------------*/
+
+// Declaring global variables
+let activePlayer,
+  handSize,
+  deck,
+  discards,
+  p1Hand,
+  p2Hand,
+  p1CardImg,
+  p2CardImg,
+  goalNum,
+  p1Score,
+  p2Score;
 
 init();
