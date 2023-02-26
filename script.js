@@ -6,7 +6,7 @@ function init() {
   // Return:  none
 
   activePlayer = 0;
-  // let phase = 0;
+  actionCount = 0;
 
   handSize = 7;
 
@@ -169,6 +169,7 @@ function swapPlayerCards(arr1, arr2, pos1, pos2) {
   // Parameters: (player1,position1) position of card 1, (player2,position2) position of card 2
   // Actions: swap the card values at these two positions
   // Return: none
+
   const temp = arr1[pos1];
   arr1[pos1] = arr2[pos2];
   arr2[pos2] = temp;
@@ -254,13 +255,30 @@ function onCardClick() {
   // Actions: handler for when card clicked
   // Return: id of card clicked
 
-  console.log(this.id);
-  const cardID = this.id;
-  const cardIndex = Number(cardID.substr(5)) - 1;
-  const player = cardID.substr(0, 2);
-  console.log(cardIndex);
-  console.log(player);
-  swapPlayerCards(`${player}Hand`, p2Hand, cardIndex, 1);
+  // console.log(this.id);
+  const cardID = this.id; 
+  const cardIndex = Number(cardID.substr(5)) - 1; // card index of the player array
+  const player = cardID.substr(0, 2); // p1 / p2 
+  // console.log(cardIndex);
+  // console.log(player);
+
+  if (actionCount === 0) {
+    baseCard.arr = player === 'p1' ? p1Hand : p2Hand;
+    baseCard.index = cardIndex;
+  }else{
+    // swapPlayerCards(player === 'p1' ? p1Hand : p2Hand, 
+    // , 
+    // cardIndex, 
+    // 0);
+    // renderAll();
+  }
+
+
+ 
+  
+  actionCount++;
+  if(actionCount === 2) activePlayer = !activePlayer;
+  actionCount = 0;
 }
 
 function setUpEventListeners() {
@@ -308,7 +326,11 @@ function changeDeck(card) {
   // Return: none
 }
 */
+function renderAll(){
+  renderHand(p1CardImg, p1Hand);
+  renderHand(p2CardImg, p2Hand);
 
+}
 function renderHand(imgCardArr, hand) {
   // Inputs:  (imgCardArr) array containing each img DOM element for a player's hand
   //          (hand) array containing a player's hand card values
@@ -360,6 +382,7 @@ function renderCard(imgTag, cardValue) {
 
 // Declaring global variables
 let activePlayer,
+  actionCount,
   handSize,
   deck,
   discards,
@@ -370,5 +393,7 @@ let activePlayer,
   goalNum,
   p1Score,
   p2Score;
+
+const baseCard = {arr, index};
 
 init();
