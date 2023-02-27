@@ -1,3 +1,4 @@
+
 /* SETUP FUNCTIONS ---------------------------------------------------------------------------------------------------------*/
 
 function init() {
@@ -5,10 +6,11 @@ function init() {
   // Action:  calls all the other setup functions when restarting a game
   // Return:  none
 
+  handSize = 7;
+
+  // Reset phase
   activePlayer = 0;
   actionCount = 0;
-
-  handSize = 7;
 
   // Initialise card arrays
   deck = shuffle(setUpDeck());
@@ -20,21 +22,15 @@ function init() {
   createHandSlots(1, handSize);
   createHandSlots(2, handSize);
 
-  // Rendering hand cards
-  p1CardImg = cardDOMCollator(1, handSize);
-  p2CardImg = cardDOMCollator(2, handSize);
-  renderHand(p1CardImg, p1Hand);
-  renderHand(p2CardImg, p2Hand);
-
   // Choosing goal score
   goalNum = chooseGoalNumber();
 
   // Evaluating and rendering hand scores
   p1Score = evaluateHand(p1Hand);
   p2Score = evaluateHand(p2Hand);
-  // NEEDED: 2x render hand scores
 
   setUpEventListeners();
+  renderAll()
 }
 
 function setUpDeck() {
@@ -63,9 +59,9 @@ function setUpDiscards() {
 }
 
 function setUpHand(deck, len) {
-  // Inputs:  (deck) a 52-length fully populated 'deck' array
+  // Inputs:  (deck) a fully populated 'deck' array
   //          (len) the number of cards in each hand
-  // Action:  create a 'hand' array of variable length, randomly fill it with cards from the deck, remove those cards from the deck
+  // Action:  create a 'hand' array of specified length, randomly fill it with cards from the deck, remove those cards from the deck
   // Return:  the hand array
 
   const hand = [];
@@ -141,7 +137,11 @@ function chooseGoalNumber() {
   return goalNum;
 }
 
+
 /* RUNTIME FUNCTIONS -------------------------------------------------------------------------------------------------------*/
+
+// nextphase function
+
 
 /* CARD MANIPULATOR FUNCTIONS ----------------------------------------------------------------------------------------------*/
 
@@ -166,7 +166,10 @@ function setPlayerCard(player, position, card) {
 */
 
 function swapPlayerCards(arr1, arr2, pos1, pos2) {
-  // Parameters: (player1,position1) position of card 1, (player2,position2) position of card 2
+  // Parameters: (arr1) the array containing the first card to be swapped,
+  //             (arr2) the array containing the second card to be swapped,
+  //             (pos1) the index of the first card,
+  //             (pos2) the index of the second card
   // Actions: swap the card values at these two positions
   // Return: none
 
@@ -189,6 +192,7 @@ function shuffle(deck) {
 
   return shuffledDeck;
 }
+
 
 /* LOGIC FUNCTIONS ---------------------------------------------------------------------------------------------------------*/
 
@@ -243,42 +247,48 @@ function safeRun(string) {
   }
 }
 
+
 /* UI FUNCTIONS ------------------------------------------------------------------------------------------------------------*/
+
 function onDeckClick() {
   // Parameters: none
   // Actions: handler for when deck clicked
   // Return: none
+
   renderCard(this, deck[deck.length - 1]);
 }
+
 function onCardClick() {
   // Parameters: none
   // Actions: handler for when card clicked
   // Return: id of card clicked
 
-  // console.log(this.id);
+  // Interpreting ID
   const cardID = this.id; 
   const cardIndex = Number(cardID.substr(5)) - 1; // card index of the player array
-  const player = cardID.substr(0, 2); // p1 / p2 
-  // console.log(cardIndex);
-  // console.log(player);
+  const player = cardID.substr(0, 2); // p1 / p2
 
   if (actionCount === 0) {
+    // First click --> store
     baseCard.arr = player === 'p1' ? p1Hand : p2Hand;
     baseCard.index = cardIndex;
-  }else{
-    // swapPlayerCards(player === 'p1' ? p1Hand : p2Hand, 
-    // , 
-    // cardIndex, 
-    // 0);
-    // renderAll();
+  } else {
+    // Second click --> swap
+    //swapPlayerCards(player === 'p1' ? p1Hand : p2Hand,
+    //p2Hand,
+    //cardIndex,
+    //0);
+    renderAll();
   }
 
-
- 
-  
+  // Update phase
   actionCount++;
-  if(actionCount === 2) activePlayer = !activePlayer;
-  actionCount = 0;
+  if (actionCount === 2) {
+    activePlayer = !activePlayer;
+    actionCount = 0;
+  }
+
+  return cardID;
 }
 
 function setUpEventListeners() {
@@ -286,12 +296,17 @@ function setUpEventListeners() {
   // Action:  central function to add event listeners
   // Return:  none
 
+  // Deck and discards
   document.getElementById("deck--img").addEventListener("click", onDeckClick);
-  Array.from(document.querySelectorAll(".card--div"), (el) =>
-    el.addEventListener("click", onCardClick)
-  );
-  // INCOMPLETE
+  // discards click event listener
+
+  // Hands
+  cardDivNodeList = Array.from(document.querySelectorAll(".card--div"));
+  for (i in cardDivNodeList) {
+    cardDivNodeList[i].addEventListener("click", onCardClick);
+  }
 }
+
 
 /* RENDER FUNCTIONS --------------------------------------------------------------------------------------------------------*/
 
@@ -326,17 +341,30 @@ function changeDeck(card) {
   // Return: none
 }
 */
-function renderAll(){
-  renderHand(p1CardImg, p1Hand);
-  renderHand(p2CardImg, p2Hand);
 
-}
-function renderHand(imgCardArr, hand) {
-  // Inputs:  (imgCardArr) array containing each img DOM element for a player's hand
-  //          (hand) array containing a player's hand card values
-  // Action:  Renders an entire hand
+function renderAll() {
+  // Inputs:  none
+  // Action:  renders all DOM elements (both hands, the discards, and the deck)
   // Return:  none
 
+  renderHand(1, p1Hand);
+  renderHand(2, p2Hand);
+
+  // render discards
+
+  // render deck (note: needs face down/up state)
+}
+
+function renderHand(player, hand) {
+  // Inputs:  (player) which player's hand to render [1-2]
+  //          (hand) array containing a player's hand card values
+  // Action:  renders an entire hand
+  // Return:  none
+
+  // Get img elements
+  imgCardArr = cardDOMCollator(player, handSize);
+
+  // Render all
   for (let i = 0; i < imgCardArr.length; i++) {
     renderCard(imgCardArr[i], hand[i]);
   }
@@ -345,7 +373,7 @@ function renderHand(imgCardArr, hand) {
 function renderCard(imgTag, cardValue) {
   // Inputs:  (imgTag) the img DOM element to be updated
   //          (cardValue) the card value to update to
-  // Action:  Renders a single card
+  // Action:  renders a single card
   // Return:  none
 
   // Name library for suits and numbers
@@ -366,17 +394,18 @@ function renderCard(imgTag, cardValue) {
     "King",
   ];
 
-  // Get suit
+  // Get suit [0-3]
   const suitNum = Math.trunc(cardValue / 13);
 
-  // Get num
+  // Get num [0-12]
   const cardNum = cardValue % 13;
   const cardNumPadded = String(cardNum).padStart(3, "0");
 
   // Rendering
   imgTag.src = `assets/${group[suitNum]}/tile${cardNumPadded}.png`; // Change image
-  imgTag.alt = `${cardNames[cardNum]} of ${group[suitNum]}.`; // Change alt text   #accessibility
+  imgTag.alt = `${cardNames[cardNum]} of ${group[suitNum]}.`;       // Change alt text   #accessibility
 }
+
 
 /* GLOBAL VARIABLES --------------------------------------------------------------------------------------------------------*/
 
@@ -388,12 +417,10 @@ let activePlayer,
   discards,
   p1Hand,
   p2Hand,
-  p1CardImg,
-  p2CardImg,
   goalNum,
   p1Score,
   p2Score;
 
-const baseCard = {arr, index};
+const baseCard = {arr: 0, index: 0};
 
 init();
