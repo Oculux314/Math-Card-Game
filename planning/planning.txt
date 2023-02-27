@@ -1,0 +1,35 @@
+/*-------------- META PLANNING --------------*/
+
+Working title: Ace the 5th
+Fun rating: infinity
+
+
+
+/*------------------- HTML ------------------*/
+
+Left div                    class="layout--div" id="left"
+    2x player divs          class="player--div" id="player--X"
+        Header div          class="header--div"
+            Header          class="header"
+        Card rack div       class="card--rack"
+            5x card divs    class="card--div" id="pX--cY"
+                Card            <-- text for now but probably card images later
+        Score div           class="score--div"
+            Score           class="score"
+Right div                   class="layout--div" id="right"
+    Deck div                class="deck--div"
+        Deck                    <-- text for now but probably card images later
+    Goal score div          class="score--div"
+        Goal score          class="score"
+
+
+/*---------------- CSS/ASSETS ---------------*/
+
+None for now - we can do this at the end.
+
+
+
+/*-------------- JS FUNCTIONS ---------------*/
+
+We can write the function headers as we find we need the function, then write the function properly at our leisure.
+We should try to put as much (all??) of our code as possible into functions to reduce spam in the global scope and make things neater and more reusable.
