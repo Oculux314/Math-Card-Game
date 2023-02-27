@@ -140,7 +140,19 @@ function chooseGoalNumber() {
 
 /* RUNTIME FUNCTIONS -------------------------------------------------------------------------------------------------------*/
 
-// nextphase function
+function nextPhase() {
+  // Inputs:  none
+  // Action:  updates activePlayer and actionCount to the next phase
+  // Return:  none
+
+  actionCount++;
+
+  if (actionCount === 2) {
+    // Next player turn
+    activePlayer = !activePlayer;
+    actionCount = 0;
+  }
+}
 
 
 /* CARD MANIPULATOR FUNCTIONS ----------------------------------------------------------------------------------------------*/
@@ -281,13 +293,7 @@ function onCardClick() {
     renderAll();
   }
 
-  // Update phase
-  actionCount++;
-  if (actionCount === 2) {
-    activePlayer = !activePlayer;
-    actionCount = 0;
-  }
-
+  nextPhase()
   return cardID;
 }
 
