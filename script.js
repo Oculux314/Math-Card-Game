@@ -271,6 +271,8 @@ function onDeckClick() {
 }
 
 function onCardClick() {
+  
+  console.log(activePlayer);
   // Parameters: none
   // Actions: handler for when card clicked
   // Return: id of card clicked
@@ -278,22 +280,27 @@ function onCardClick() {
   // Interpreting ID
   const cardID = this.id; 
   const cardIndex = Number(cardID.substr(5)) - 1; // card index of the player array
-  const player = cardID.substr(0, 2); // p1 / p2
+  const player = Number(cardID.substr(1, 1)) - 1;
+  const arr = player === 0 ? p1Hand : p2Hand; // p1 / p2
+  
+  if (player != activePlayer) {
+    return;
+  }
 
   if (actionCount === 0) {
     // First click --> store
-    baseCard.arr = player === 'p1' ? p1Hand : p2Hand;
+    baseCard.arr = arr;
     baseCard.index = cardIndex;
   } else {
     // Second click --> swap
-    //swapPlayerCards(player === 'p1' ? p1Hand : p2Hand,
-    //p2Hand,
-    //cardIndex,
-    //0);
+    baseCard.arr[baseCard.index];
+    swapPlayerCards(baseCard.arr, arr, baseCard.index, cardIndex);
     renderAll();
+    renderHandScore(player, evaluateHand(arr));
   }
 
-  nextPhase()
+ 
+  nextPhase();
   return cardID;
 }
 
@@ -316,13 +323,16 @@ function setUpEventListeners() {
 
 /* RENDER FUNCTIONS --------------------------------------------------------------------------------------------------------*/
 
-/*
-function renderHandScore(id, score) {
-  // Parameters: (id) id of score element, (score) score of current hand
+function renderHandScore(player, score) {
+  // Parameters: (player) owner of score element, (score) score of current hand
   // Actions: update a single score html element
   // Return: none
+
+  scoreElement = document.getElementById(`p${player+1}--score`);
+  scoreElement.innerText = score;
 }
 
+/*
 function renderGoalScore(score) {
   // Parameters: (score) score both players are aiming for to win the game
   // Actions: update the goal score html element
